@@ -838,3 +838,32 @@ func (t *TemplateNode) tree() *Tree {
 func (t *TemplateNode) Copy() Node {
 	return t.tr.newTemplate(t.Pos, t.Line, t.Name, t.Pipe.CopyPipe())
 }
+
+// ExtendsNode represents a {{extends}} action.
+type ExtendsNode struct {
+	NodeType
+	Pos
+	tr   *Tree
+	Line int       // The line number in the input. Deprecated: Kept for compatibility.
+	Name string    // The name of the extension (unquoted).
+	Pipe *PipeNode // The command to evaluate as dot for the extension.
+}
+
+func (t *Tree) newExtends(pos Pos, line int, name string, pipe *PipeNode) *TemplateNode {
+	return &ExtendsNode{tr: t, NodeType: NodeTemplate, Pos: pos, Line: line, Name: name, Pipe: pipe}
+}
+
+func (t *ExtendsNode) String() string {
+	if t.Pipe == nil {
+		return fmt.Sprintf("{{extends %q}}", t.Name)
+	}
+	return fmt.Sprintf("{{extends %q %s}}", t.Name, t.Pipe)
+}
+
+func (t *ExtendsNode) tree() *Tree {
+	return t.tr
+}
+
+func (t *ExtendsNode) Copy() Node {
+	return t.tr.newTemplate(t.Pos, t.Line, t.Name, t.Pipe.CopyPipe())
+}
