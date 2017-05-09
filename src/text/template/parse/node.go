@@ -69,6 +69,7 @@ const (
 	NodeTemplate                   // A template invocation action.
 	NodeVariable                   // A $ variable.
 	NodeWith                       // A with action.
+	NodeExtends                    // A extends invocation action.
 )
 
 // Nodes.
